@@ -1,0 +1,418 @@
+﻿<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>AI Tomato Care - Feedback</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}"
+            rel="stylesheet"
+        />
+        <link
+            href="{{ url_for('static', filename='vendor/bootstrap-icons/font/bootstrap-icons.min.css') }}"
+            rel="stylesheet"
+        />
+        <link
+            rel="stylesheet"
+            href="{{ url_for('static', filename='css/app.css') }}"
+        />
+        <style>
+            .feedback-layout {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 16px;
+            }
+            .feedback-card {
+                background: linear-gradient(
+                    135deg,
+                    rgba(236, 253, 245, 0.9),
+                    rgba(254, 242, 242, 0.9)
+                );
+                border: 1px solid rgba(20, 184, 166, 0.25);
+                border-radius: 16px;
+                padding: 18px;
+                box-shadow: 0 10px 24px rgba(15, 118, 110, 0.14);
+                height: 100%;
+            }
+            .feedback-stars-input {
+                display: flex;
+                gap: 8px;
+                margin-bottom: 10px;
+            }
+            .feedback-star-btn {
+                border: 0;
+                background: transparent;
+                color: #94a3b8;
+                font-size: 1.3rem;
+                line-height: 1;
+                padding: 0;
+            }
+            .feedback-star-btn.active {
+                color: #f59e0b;
+            }
+            .feedback-item {
+                background: rgba(255, 255, 255, 0.82);
+                border: 1px solid rgba(13, 148, 136, 0.18);
+                border-radius: 12px;
+                padding: 10px 12px;
+            }
+            .feedback-item + .feedback-item {
+                margin-top: 10px;
+            }
+            .feedback-item .stars {
+                color: #f59e0b;
+                font-size: 0.9rem;
+                letter-spacing: 0.04em;
+            }
+            .feedback-action-row {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                flex-wrap: wrap;
+            }
+            @media (max-width: 992px) {
+                .feedback-layout {
+                    grid-template-columns: 1fr;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <button
+            class="sidebar-toggle"
+            id="sidebarToggle"
+            type="button"
+            aria-label="Toggle sidebar"
+        >
+            <i class="bi bi-list"></i>
+        </button>
+        <div class="container-fluid">
+            <div class="row">
+                {% include 'partials/sidebar.html' %}
+                <div class="main-panel p-5">
+                    {% include 'partials/top_nav.html' %}
+                    <div class="content-box mb-4">
+                        <h2 class="fw-bold mb-2">
+                            <i class="bi bi-chat-square-heart-fill me-2"></i>
+                            Feedback
+                        </h2>
+                        <p class="mb-0">
+                            Rate the system and optionally share a comment.
+                        </p>
+                    </div>
+                    <div class="feedback-layout">
+                        <div class="feedback-card">
+                            <h5 class="fw-bold mb-2">Add your rating</h5>
+                            {% if current_user.is_authenticated %}
+                            <p class="small mb-2">
+                                Submit again any time to update your previous
+                                feedback.
+                            </p>
+                            <form id="feedbackForm">
+                                <div class="feedback-stars-input">
+                                    <button
+                                        type="button"
+                                        class="feedback-star-btn"
+                                        data-value="1"
+                                        aria-label="1 star"
+                                    >
+                                        <i class="bi bi-star-fill"></i>
+                                    </button>
+                                    <button
+                                        type="button"
+                                        class="feedback-star-btn"
+                                        data-value="2"
+                                        aria-label="2 stars"
+                                    >
+                                        <i class="bi bi-star-fill"></i>
+                                    </button>
+                                    <button
+                                        type="button"
+                                        class="feedback-star-btn"
+                                        data-value="3"
+                                        aria-label="3 stars"
+                                    >
+                                        <i class="bi bi-star-fill"></i>
+                                    </button>
+                                    <button
+                                        type="button"
+                                        class="feedback-star-btn"
+                                        data-value="4"
+                                        aria-label="4 stars"
+                                    >
+                                        <i class="bi bi-star-fill"></i>
+                                    </button>
+                                    <button
+                                        type="button"
+                                        class="feedback-star-btn"
+                                        data-value="5"
+                                        aria-label="5 stars"
+                                    >
+                                        <i class="bi bi-star-fill"></i>
+                                    </button>
+                                </div>
+                                <input
+                                    type="hidden"
+                                    id="feedbackRating"
+                                    value="{{ user_feedback.rating if user_feedback else 0 }}"
+                                />
+                                <textarea
+                                    id="feedbackComment"
+                                    class="form-control mb-2"
+                                    rows="4"
+                                    maxlength="1000"
+                                    placeholder="Comment (optional)"
+                                >{{- user_feedback.comment if user_feedback else "" -}}</textarea>
+                                <div class="feedback-action-row">
+                                    <button
+                                        type="submit"
+                                        class="btn btn-outline-teal"
+                                        id="feedbackSubmitBtn"
+                                    >
+                                        <i class="bi bi-send"></i>
+                                        Save Feedback
+                                    </button>
+                                    {% if user_feedback %}
+                                    <button
+                                        type="button"
+                                        class="btn btn-outline-danger"
+                                        id="feedbackDeleteBtn"
+                                    >
+                                        <i class="bi bi-trash"></i>
+                                        Delete Feedback
+                                    </button>
+                                    {% endif %}
+                                </div>
+                            </form>
+                            <div
+                                class="alert alert-danger py-2 mb-2 mt-2"
+                                id="feedbackError"
+                                style="display: none"
+                            ></div>
+                            <div
+                                class="alert alert-success py-2 mb-2 mt-2"
+                                id="feedbackSuccess"
+                                style="display: none"
+                            ></div>
+                            {% else %}
+                            <p class="small mb-0">
+                                Please
+                                <a href="{{ url_for('login_page') }}">login</a>
+                                to add your rating.
+                            </p>
+                            {% endif %}
+                        </div>
+                        <div class="feedback-card">
+                            <h5 class="fw-bold mb-2">Recent User Ratings</h5>
+                            {% if recent_feedbacks %} {% for fb in
+                            recent_feedbacks %}
+                            <div class="feedback-item">
+                                <div
+                                    class="d-flex justify-content-between align-items-start gap-2"
+                                >
+                                    <div class="fw-semibold">
+                                        {{ fb.user_name }}
+                                    </div>
+                                    <small
+                                        class="text-muted js-local-time"
+                                        data-time="{{ fb.created_at }}"
+                                    ></small>
+                                </div>
+                                <div class="stars mb-1">
+                                    {% for _ in range(fb.rating) %}
+                                    <i class="bi bi-star-fill"></i>
+                                    {% endfor %} {% for _ in range(5-fb.rating)
+                                    %}
+                                    <i class="bi bi-star"></i>
+                                    {% endfor %}
+                                </div>
+                                <div class="small text-dark">
+                                    {{ fb.comment or "No comment provided." }}
+                                </div>
+                            </div>
+                            {% endfor %} {% else %}
+                            <p class="small text-muted mb-0">
+                                No feedback yet. Be the first to rate.
+                            </p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+        <script>
+            const feedbackForm = document.getElementById("feedbackForm");
+            const feedbackRatingInput =
+                document.getElementById("feedbackRating");
+            const feedbackCommentInput =
+                document.getElementById("feedbackComment");
+            const feedbackError = document.getElementById("feedbackError");
+            const feedbackSuccess = document.getElementById("feedbackSuccess");
+            const feedbackSubmitBtn =
+                document.getElementById("feedbackSubmitBtn");
+            const feedbackDeleteBtn =
+                document.getElementById("feedbackDeleteBtn");
+            const feedbackStarButtons = Array.from(
+                document.querySelectorAll(".feedback-star-btn"),
+            );
+
+            function setFeedbackStars(value) {
+                feedbackStarButtons.forEach((btn) => {
+                    const starValue = Number(btn.dataset.value || 0);
+                    btn.classList.toggle("active", starValue <= value);
+                });
+            }
+
+            feedbackStarButtons.forEach((btn) => {
+                btn.addEventListener("click", () => {
+                    const selected = Number(btn.dataset.value || 0);
+                    if (feedbackRatingInput) {
+                        feedbackRatingInput.value = String(selected);
+                    }
+                    setFeedbackStars(selected);
+                });
+            });
+            const initialRating = Number(
+                (feedbackRatingInput && feedbackRatingInput.value) || 0,
+            );
+            if (initialRating >= 1 && initialRating <= 5) {
+                setFeedbackStars(initialRating);
+            }
+
+            if (feedbackForm) {
+                feedbackForm.addEventListener("submit", async (e) => {
+                    e.preventDefault();
+                    const rating = Number(
+                        (feedbackRatingInput && feedbackRatingInput.value) || 0,
+                    );
+                    const comment = (
+                        (feedbackCommentInput && feedbackCommentInput.value) ||
+                        ""
+                    ).trim();
+                    const loader =
+                        window.aiTomato && window.aiTomato.buttonLoader;
+                    if (feedbackError) feedbackError.style.display = "none";
+                    if (feedbackSuccess) feedbackSuccess.style.display = "none";
+
+                    if (rating < 1 || rating > 5) {
+                        if (feedbackError) {
+                            feedbackError.textContent =
+                                "Please select a star rating.";
+                            feedbackError.style.display = "block";
+                        }
+                        return;
+                    }
+
+                    if (loader && feedbackSubmitBtn) {
+                        loader.setLoading(feedbackSubmitBtn, "Submitting...");
+                    }
+                    try {
+                        const res = await fetch(
+                            "{{ url_for('api_feedback_create') }}",
+                            {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({ rating, comment }),
+                            },
+                        );
+                        const data = await res.json();
+                        if (!res.ok || !data.success) {
+                            if (feedbackError) {
+                                feedbackError.textContent =
+                                    data.message ||
+                                    "Failed to submit feedback.";
+                                feedbackError.style.display = "block";
+                            }
+                            return;
+                        }
+                        if (feedbackSuccess) {
+                            feedbackSuccess.textContent =
+                                data.message || "Thanks for your feedback!";
+                            feedbackSuccess.style.display = "block";
+                        }
+                        if (feedbackCommentInput) {
+                            feedbackCommentInput.value = "";
+                        }
+                        if (feedbackRatingInput) {
+                            feedbackRatingInput.value = "0";
+                        }
+                        setFeedbackStars(0);
+                        setTimeout(() => window.location.reload(), 700);
+                    } catch (err) {
+                        if (feedbackError) {
+                            feedbackError.textContent =
+                                "Failed to submit feedback. Please try again.";
+                            feedbackError.style.display = "block";
+                        }
+                    } finally {
+                        if (loader && feedbackSubmitBtn) {
+                            loader.reset(feedbackSubmitBtn);
+                        }
+                    }
+                });
+            }
+
+            if (feedbackDeleteBtn) {
+                feedbackDeleteBtn.addEventListener("click", async () => {
+                    const loader =
+                        window.aiTomato && window.aiTomato.buttonLoader;
+                    if (feedbackError) feedbackError.style.display = "none";
+                    if (feedbackSuccess) feedbackSuccess.style.display = "none";
+
+                    if (loader) {
+                        loader.setLoading(feedbackDeleteBtn, "Deleting...");
+                    }
+                    try {
+                        const res = await fetch(
+                            "{{ url_for('api_feedback_delete') }}",
+                            {
+                                method: "POST",
+                            },
+                        );
+                        const data = await res.json();
+                        if (!res.ok || !data.success) {
+                            if (feedbackError) {
+                                feedbackError.textContent =
+                                    data.message ||
+                                    "Failed to delete feedback.";
+                                feedbackError.style.display = "block";
+                            }
+                            return;
+                        }
+                        if (feedbackSuccess) {
+                            feedbackSuccess.textContent =
+                                data.message ||
+                                "Feedback deleted. You can add a new one now.";
+                            feedbackSuccess.style.display = "block";
+                        }
+                        setTimeout(() => window.location.reload(), 700);
+                    } catch (err) {
+                        if (feedbackError) {
+                            feedbackError.textContent =
+                                "Failed to delete feedback. Please try again.";
+                            feedbackError.style.display = "block";
+                        }
+                    } finally {
+                        if (loader) {
+                            loader.reset(feedbackDeleteBtn);
+                        }
+                    }
+                });
+            }
+
+            if (window.aiTomato && window.aiTomato.formatLocalTimes) {
+                window.aiTomato.formatLocalTimes({
+                    selector: ".js-local-time",
+                });
+            }
+        </script>
+    </body>
+</html>
+

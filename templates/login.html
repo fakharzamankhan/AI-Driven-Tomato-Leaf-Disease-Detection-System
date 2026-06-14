@@ -1,0 +1,263 @@
+﻿<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>AI Tomato Care - Login</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}"
+            rel="stylesheet"
+        />
+        <link
+            href="{{ url_for('static', filename='vendor/bootstrap-icons/font/bootstrap-icons.min.css') }}"
+            rel="stylesheet"
+        />
+        <link
+            rel="stylesheet"
+            href="{{ url_for('static', filename='css/app.css') }}"
+        />
+        <style>
+            .login-card {
+                background: var(--card-gradient);
+                border-radius: 20px;
+                padding: 40px;
+                color: var(--text-dark);
+                max-width: 420px;
+                margin: auto;
+                box-shadow: var(--shadow);
+                border: none;
+            }
+            .form-control,
+            .form-control:focus {
+                border-radius: 12px;
+                border: 2px solid rgba(13, 148, 136, 0.3);
+            }
+            .btn-login {
+                background: linear-gradient(
+                    135deg,
+                    var(--primary),
+                    var(--accent)
+                );
+                color: #fff;
+                border-radius: 16px;
+                width: 100%;
+                padding: 12px;
+                font-weight: 600;
+                border: none;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                box-shadow: 0 12px 26px rgba(13, 148, 136, 0.26);
+                transition:
+                    transform 0.2s ease,
+                    box-shadow 0.2s ease,
+                    background 0.2s ease;
+            }
+            .btn-login:hover {
+                background: linear-gradient(
+                    135deg,
+                    var(--accent),
+                    var(--primary-dark)
+                );
+                color: #fff;
+                transform: translateY(-2px);
+                box-shadow: 0 18px 32px rgba(13, 148, 136, 0.3);
+            }
+        </style>
+    </head>
+    <body>
+        <button
+            class="sidebar-toggle"
+            id="sidebarToggle"
+            type="button"
+            aria-label="Toggle sidebar"
+        >
+            <i class="bi bi-list"></i>
+        </button>
+        <div class="container-fluid">
+            <div class="row">
+                {% include 'partials/sidebar.html' %}
+                <div class="main-panel p-5">
+                    {% include 'partials/top_nav.html' %}
+                    <div class="login-card">
+                        <h2 class="fw-bold mb-4 text-center">Welcome Back</h2>
+                        {% if request.args.get('next') %}
+                        <div class="alert alert-info py-2 small mb-3">
+                            Please log in to access that page.
+                        </div>
+                        {% endif %}
+                        <div
+                            class="alert alert-danger py-2"
+                            id="errorAlert"
+                            style="display: none"
+                        ></div>
+                        <form id="loginForm">
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold">
+                                    Email
+                                </label>
+                                <input
+                                    type="email"
+                                    class="form-control"
+                                    id="email"
+                                    name="email"
+                                    placeholder="Enter your email"
+                                    required
+                                />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold">
+                                    Password
+                                </label>
+                                <div class="input-group">
+                                    <input
+                                        type="password"
+                                        class="form-control"
+                                        id="password"
+                                        name="password"
+                                        placeholder="Enter your password"
+                                        autocomplete="current-password"
+                                        required
+                                    />
+                                    <button
+                                        class="btn btn-password-toggle password-toggle"
+                                        type="button"
+                                        data-target="password"
+                                        aria-label="Show password"
+                                    >
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-end mb-3">
+                                <a
+                                    href="{{ url_for('forgot_password_page') }}"
+                                    class="small text-muted"
+                                >
+                                    Forgot password?
+                                </a>
+                            </div>
+                            <button
+                                type="submit"
+                                class="btn btn-login mb-2 w-100"
+                                id="loginSubmitBtn"
+                            >
+                                Login
+                            </button>
+                            <p class="mb-0 text-center small mt-2">
+                                Don't have an account?
+                                <a
+                                    href="{{ url_for('register_page') }}"
+                                    class="fw-bold"
+                                >
+                                    Sign Up
+                                </a>
+                            </p>
+                        </form>
+                    </div>
+                    <div class="text-center mt-4">
+                        <a
+                            href="#"
+                            class="social-link social-twitter"
+                            title="Your Twitter"
+                        >
+                            <i class="bi bi-twitter-x"></i
+                        ></a>
+                        <a
+                            href="#"
+                            class="social-link social-whatsapp"
+                            title="Your WhatsApp"
+                        >
+                            <i class="bi bi-whatsapp"></i
+                        ></a>
+                        <a
+                            href="#"
+                            class="social-link social-facebook"
+                            title="Your Facebook"
+                        >
+                            <i class="bi bi-facebook"></i
+                        ></a>
+                        <a
+                            href="#"
+                            class="social-link social-instagram"
+                            title="Your Instagram"
+                        >
+                            <i class="bi bi-instagram"></i
+                        ></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+        <script>
+            document
+                .getElementById("loginForm")
+                .addEventListener("submit", async function (e) {
+                    e.preventDefault();
+                    const submitBtn = document.getElementById("loginSubmitBtn");
+                    const loader =
+                        window.aiTomato && window.aiTomato.buttonLoader;
+                    if (loader) {
+                        loader.setLoading(submitBtn, "Logging in...");
+                    }
+                    document.getElementById("errorAlert").style.display =
+                        "none";
+                    try {
+                        var loginUrl = "{{ url_for('login_page') }}";
+                        if (window.location.search)
+                            loginUrl += window.location.search;
+                        const res = await fetch(loginUrl, {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                                email: document.getElementById("email").value,
+                                password:
+                                    document.getElementById("password").value,
+                            }),
+                        });
+                        const data = await res.json();
+                        if (data.success) {
+                            if (loader) {
+                                loader.setRedirecting(
+                                    submitBtn,
+                                    "Redirecting...",
+                                );
+                            }
+                            window.location.href =
+                                data.redirect || "{{ url_for('index') }}";
+                            return;
+                        }
+                        if (data.redirect) {
+                            if (loader) {
+                                loader.setRedirecting(
+                                    submitBtn,
+                                    "Redirecting...",
+                                );
+                            }
+                            window.location.href = data.redirect;
+                            return;
+                        }
+                        document.getElementById("errorAlert").textContent =
+                            data.message || "Login failed.";
+                        document.getElementById("errorAlert").style.display =
+                            "block";
+                    } catch (err) {
+                        document.getElementById("errorAlert").textContent =
+                            "Login failed. Please try again.";
+                        document.getElementById("errorAlert").style.display =
+                            "block";
+                    }
+                    if (loader) {
+                        loader.reset(submitBtn);
+                    }
+                });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,97 @@
+﻿<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>AI Tomato Care - FAQ</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}"
+            rel="stylesheet"
+        />
+        <link
+            href="{{ url_for('static', filename='vendor/bootstrap-icons/font/bootstrap-icons.min.css') }}"
+            rel="stylesheet"
+        />
+        <link
+            rel="stylesheet"
+            href="{{ url_for('static', filename='css/app.css') }}"
+        />
+        <style>
+            .faq-card {
+                background: linear-gradient(
+                    135deg,
+                    rgba(153, 246, 228, 0.9),
+                    rgba(253, 164, 175, 0.9)
+                );
+                border-radius: 16px;
+                padding: 22px;
+                box-shadow: var(--shadow);
+                border: 1px solid rgba(13, 148, 136, 0.24);
+                margin-bottom: 16px;
+            }
+        </style>
+    </head>
+    <body>
+        <button
+            class="sidebar-toggle"
+            id="sidebarToggle"
+            type="button"
+            aria-label="Toggle sidebar"
+        >
+            <i class="bi bi-list"></i>
+        </button>
+        <div class="container-fluid">
+            <div class="row">
+                {% include 'partials/sidebar.html' %}
+                <div class="main-panel p-5">
+                    {% include 'partials/top_nav.html' %}
+
+                    <h2 class="fw-bold mb-4">Frequently Asked Questions</h2>
+
+                    <div class="faq-card">
+                        <h5 class="fw-bold">How accurate is the AI?</h5>
+                        <p class="mb-0">
+                            Accuracy is strongest when the photo is clear,
+                            well-lit, and focused on a single leaf. For the
+                            most reliable result, avoid blurry images, dark
+                            lighting, and crowded backgrounds.
+                        </p>
+                    </div>
+                    <div class="faq-card">
+                        <h5 class="fw-bold">Do I need an account?</h5>
+                        <p class="mb-0">
+                            You can run a quick scan without signing in.
+                            Creating an account lets you save scan history,
+                            manage your profile, and access full account
+                            settings.
+                        </p>
+                    </div>
+                    <div class="faq-card">
+                        <h5 class="fw-bold">What diseases are supported?</h5>
+                        <p class="mb-0">
+                            The system currently identifies four classes:
+                            Early Blight, Late Blight, Leaf Mold, and Healthy
+                            leaf condition.
+                        </p>
+                    </div>
+                    <div class="faq-card">
+                        <h5 class="fw-bold">How do I reset my password?</h5>
+                        <p class="mb-0">
+                            Select the Forgot Password option on the login page
+                            and submit your email address. You will receive a
+                            reset link with instructions to create a new
+                            password.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    </body>
+</html>

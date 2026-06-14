@@ -1,0 +1,524 @@
+﻿<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>AI Tomato Care - Dashboard</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}"
+            rel="stylesheet"
+        />
+        <link
+            href="{{ url_for('static', filename='vendor/bootstrap-icons/font/bootstrap-icons.min.css') }}"
+            rel="stylesheet"
+        />
+        <link
+            rel="stylesheet"
+            href="{{ url_for('static', filename='css/app.css') }}"
+        />
+        <style>
+            .welcome-card {
+                background: var(--card-gradient);
+                border-radius: 20px;
+                padding: 36px 40px;
+                color: var(--text-dark);
+                box-shadow: var(--shadow);
+                margin-bottom: 24px;
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+            }
+            .welcome-title {
+                font-weight: 700;
+                font-size: 1.4rem;
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                white-space: nowrap;
+                max-width: 100%;
+            }
+            .welcome-name {
+                max-width: 320px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                display: inline-block;
+                vertical-align: bottom;
+            }
+            .welcome-actions {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+            .stat-card {
+                background: linear-gradient(
+                    135deg,
+                    rgba(153, 246, 228, 0.94),
+                    rgba(254, 202, 202, 0.9)
+                );
+                border-radius: 18px;
+                padding: 22px 24px;
+                color: var(--text-dark);
+                box-shadow: 0 12px 26px rgba(15, 118, 110, 0.16);
+                border: 1px solid rgba(13, 148, 136, 0.2);
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                transition:
+                    transform 0.2s ease,
+                    box-shadow 0.2s ease;
+            }
+            .stat-card:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 18px 34px rgba(15, 118, 110, 0.22);
+            }
+            .row.g-3.mb-4 .col-md-4:nth-child(2) .stat-card {
+                background: linear-gradient(
+                    135deg,
+                    rgba(186, 230, 253, 0.94),
+                    rgba(196, 181, 253, 0.88)
+                );
+            }
+            .row.g-3.mb-4 .col-md-4:nth-child(3) .stat-card {
+                background: linear-gradient(
+                    135deg,
+                    rgba(253, 224, 71, 0.8),
+                    rgba(251, 146, 60, 0.72)
+                );
+            }
+            .stat-icon {
+                width: 48px;
+                height: 48px;
+                border-radius: 16px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                background: rgba(20, 184, 166, 0.15);
+                color: var(--primary-dark);
+                font-size: 1.4rem;
+            }
+            .stat-value {
+                font-weight: 700;
+                font-size: 1.4rem;
+                margin-bottom: 2px;
+            }
+            .stat-label {
+                color: #475569;
+                font-size: 0.85rem;
+                margin-bottom: 0;
+            }
+            .section-card {
+                background: linear-gradient(
+                    140deg,
+                    rgba(236, 253, 245, 0.92),
+                    rgba(254, 242, 242, 0.92)
+                );
+                border-radius: 20px;
+                padding: 24px;
+                box-shadow: 0 14px 30px rgba(15, 118, 110, 0.16);
+                border: 1px solid rgba(13, 148, 136, 0.2);
+            }
+            .section-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 12px;
+                margin-bottom: 16px;
+            }
+            .scan-list {
+                display: grid;
+                gap: 12px;
+            }
+            .scan-item {
+                display: grid;
+                grid-template-columns: 64px 1fr auto;
+                align-items: center;
+                gap: 12px;
+                padding: 12px 14px;
+                border-radius: 14px;
+                background: rgba(236, 254, 255, 0.7);
+                border: 1px solid rgba(13, 148, 136, 0.15);
+            }
+            .scan-thumb {
+                width: 64px;
+                height: 64px;
+                border-radius: 14px;
+                object-fit: cover;
+                border: 1px solid rgba(15, 118, 110, 0.2);
+                box-shadow: 0 8px 16px rgba(15, 118, 110, 0.12);
+                background: rgba(15, 118, 110, 0.08);
+            }
+            .scan-title {
+                font-weight: 700;
+                margin-bottom: 4px;
+            }
+            .scan-time {
+                font-size: 0.8rem;
+                color: #475569;
+            }
+            .scan-pill {
+                padding: 6px 12px;
+                border-radius: 999px;
+                background: rgba(20, 184, 166, 0.15);
+                color: var(--primary-dark);
+                font-weight: 700;
+                font-size: 0.8rem;
+            }
+            .label-chips {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            .label-chip {
+                padding: 6px 12px;
+                border-radius: 999px;
+                background: rgba(239, 68, 68, 0.14);
+                color: #991b1b;
+                font-size: 0.8rem;
+                font-weight: 600;
+            }
+            .action-grid {
+                display: grid;
+                gap: 12px;
+            }
+            .action-tile {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding: 14px 16px;
+                border-radius: 16px;
+                border: 1px solid rgba(13, 148, 136, 0.2);
+                background: linear-gradient(
+                    135deg,
+                    rgba(209, 250, 229, 0.94),
+                    rgba(224, 242, 254, 0.9)
+                );
+                text-decoration: none;
+                color: var(--text-dark);
+                box-shadow: 0 12px 24px rgba(15, 118, 110, 0.12);
+                transition:
+                    transform 0.2s ease,
+                    box-shadow 0.2s ease,
+                    border-color 0.2s ease;
+            }
+            .action-tile:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 18px 30px rgba(15, 118, 110, 0.2);
+                border-color: rgba(20, 184, 166, 0.4);
+                color: var(--primary-dark);
+            }
+            .action-grid .action-tile:nth-child(2) {
+                background: linear-gradient(
+                    135deg,
+                    rgba(224, 231, 255, 0.92),
+                    rgba(254, 226, 226, 0.9)
+                );
+            }
+            .action-grid .action-tile:nth-child(3) {
+                background: linear-gradient(
+                    135deg,
+                    rgba(240, 253, 250, 0.95),
+                    rgba(251, 191, 36, 0.22)
+                );
+            }
+            .action-icon {
+                width: 44px;
+                height: 44px;
+                border-radius: 14px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                background: rgba(20, 184, 166, 0.15);
+                color: var(--primary-dark);
+                font-size: 1.2rem;
+            }
+            .empty-state {
+                text-align: center;
+                padding: 28px 20px;
+                border-radius: 16px;
+                background: rgba(236, 254, 255, 0.8);
+                border: 1px dashed rgba(13, 148, 136, 0.25);
+                color: #475569;
+            }
+            @media (min-width: 992px) {
+                .welcome-card {
+                    flex-direction: row;
+                    align-items: center;
+                    justify-content: space-between;
+                }
+            }
+            @media (max-width: 576px) {
+                .welcome-title {
+                    font-size: 1.15rem;
+                }
+                .welcome-name {
+                    max-width: 180px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <button
+            class="sidebar-toggle"
+            id="sidebarToggle"
+            type="button"
+            aria-label="Toggle sidebar"
+        >
+            <i class="bi bi-list"></i>
+        </button>
+        <div class="container-fluid">
+            <div class="row">
+                {% include 'partials/sidebar.html' %}
+                <div class="main-panel p-5">
+                    {% include 'partials/top_nav.html' %}
+                    <div class="welcome-card">
+                        <div>
+                            <h2 class="welcome-title mb-2">
+                                <i class="bi bi-person-circle"></i>
+                                <span>Welcome,</span>
+                                <span
+                                    class="welcome-name"
+                                    title="{{ current_user.name }}"
+                                >
+                                    {{ current_user.name }}
+                                </span>
+                            </h2>
+                            <p class="mb-0 opacity-90">
+                                Track scans, spot patterns, and keep your tomato
+                                plants healthy.
+                            </p>
+                        </div>
+                        <div class="welcome-actions">
+                            <a
+                                href="{{ url_for('index') }}"
+                                class="btn btn-outline-teal"
+                            >
+                                <i class="bi bi-cloud-upload"></i> New Scan
+                            </a>
+                            <a
+                                href="{{ url_for('history_page') }}"
+                                class="btn btn-outline-teal"
+                            >
+                                <i class="bi bi-clock-history"></i> View History
+                            </a>
+                        </div>
+                    </div>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-4">
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="bi bi-camera-fill"></i>
+                                </div>
+                                <div>
+                                    <div class="stat-value">
+                                        {{ total_scans }}
+                                    </div>
+                                    <p class="stat-label mb-0">Total scans</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="bi bi-shield-check"></i>
+                                </div>
+                                <div>
+                                    <div class="stat-value">
+                                        {{ healthy_rate }}%
+                                    </div>
+                                    <p class="stat-label mb-0">Healthy rate</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="bi bi-activity"></i>
+                                </div>
+                                <div>
+                                    {% if last_scan %}
+                                    <div class="stat-value">
+                                        {{ last_scan_label }}
+                                    </div>
+                                    <p class="stat-label mb-0">
+                                        Last scan
+                                        <span
+                                            class="js-local-time"
+                                            data-time="{{ last_scan_iso }}"
+                                        >
+                                            {{ last_scan_iso or "" }}
+                                        </span>
+                                    </p>
+                                    {% else %}
+                                    <div class="stat-value">No scans yet</div>
+                                    <p class="stat-label mb-0">
+                                        Upload your first leaf
+                                    </p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-lg-7">
+                            <div class="section-card">
+                                <div class="section-header">
+                                    <h5 class="fw-bold mb-0">Recent scans</h5>
+                                    <a
+                                        href="{{ url_for('history_page') }}"
+                                        class="btn btn-outline-teal btn-sm"
+                                    >
+                                        <i class="bi bi-list-ul"></i> View all
+                                    </a>
+                                </div>
+                                {% if recent_scans %}
+                                <div class="scan-list">
+                                    {% for scan in recent_scans %}
+                                    <div class="scan-item">
+                                        {% if scan.image_url %}
+                                        <img
+                                            src="{{ scan.image_url }}"
+                                            alt="Scan"
+                                            class="scan-thumb"
+                                        />
+                                        {% else %}
+                                        <div
+                                            class="scan-thumb d-flex align-items-center justify-content-center"
+                                        >
+                                            <i class="bi bi-image"></i>
+                                        </div>
+                                        {% endif %}
+                                        <div>
+                                            <div class="scan-title">
+                                                {{ scan.label }}
+                                            </div>
+                                            <div class="scan-time">
+                                                <span
+                                                    class="js-local-time"
+                                                    data-time="{{ scan.created_at_iso }}"
+                                                >
+                                                    {{ scan.created_at_iso or ""
+                                                    }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <span class="scan-pill">
+                                            {{ scan.confidence }}%
+                                        </span>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                {% else %}
+                                <div class="empty-state">
+                                    <i
+                                        class="bi bi-cloud-upload display-6 d-block mb-2"
+                                    ></i>
+                                    <h6 class="fw-bold">No scans yet</h6>
+                                    <p class="small mb-3">
+                                        Upload a clear leaf photo to get your
+                                        first result.
+                                    </p>
+                                    <a
+                                        href="{{ url_for('index') }}"
+                                        class="btn btn-outline-teal btn-sm"
+                                    >
+                                        <i class="bi bi-cloud-upload"></i>
+                                        Upload now
+                                    </a>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-lg-5">
+                            <div class="section-card mb-3">
+                                <div class="section-header">
+                                    <h5 class="fw-bold mb-0">Top detections</h5>
+                                    <span class="text-muted small">
+                                        Last scans
+                                    </span>
+                                </div>
+                                {% if top_labels %}
+                                <div class="label-chips">
+                                    {% for label, count in top_labels %}
+                                    <span class="label-chip">
+                                        {{ label }} - {{ count }}
+                                    </span>
+                                    {% endfor %}
+                                </div>
+                                {% else %}
+                                <p class="small text-muted mb-0">
+                                    No detections yet.
+                                </p>
+                                {% endif %}
+                            </div>
+                            <div class="section-card">
+                                <div class="section-header">
+                                    <h5 class="fw-bold mb-0">Quick actions</h5>
+                                </div>
+                                <div class="action-grid">
+                                    <a
+                                        href="{{ url_for('care_tips_page') }}"
+                                        class="action-tile"
+                                    >
+                                        <span class="action-icon">
+                                            <i class="bi bi-lightbulb"></i>
+                                        </span>
+                                        <div>
+                                            <div class="fw-bold">Care tips</div>
+                                            <div class="small text-muted">
+                                                Treatment and prevention
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a
+                                        href="{{ url_for('history_page') }}"
+                                        class="action-tile"
+                                    >
+                                        <span class="action-icon">
+                                            <i class="bi bi-clock-history"></i>
+                                        </span>
+                                        <div>
+                                            <div class="fw-bold">History</div>
+                                            <div class="small text-muted">
+                                                Review past scans
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a
+                                        href="{{ url_for('account_page') }}"
+                                        class="action-tile"
+                                    >
+                                        <span class="action-icon">
+                                            <i class="bi bi-gear"></i>
+                                        </span>
+                                        <div>
+                                            <div class="fw-bold">Account</div>
+                                            <div class="small text-muted">
+                                                Manage your profile
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+        <script>
+            if (window.aiTomato && window.aiTomato.formatLocalTimes) {
+                window.aiTomato.formatLocalTimes({
+                    selector: ".js-local-time",
+                    keepRawOnInvalid: true,
+                });
+            }
+        </script>
+    </body>
+</html>

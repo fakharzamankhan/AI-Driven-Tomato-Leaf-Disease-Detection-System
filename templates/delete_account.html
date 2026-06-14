@@ -1,0 +1,215 @@
+﻿<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>AI Tomato Care - Delete Account</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}"
+            rel="stylesheet"
+        />
+        <link
+            href="{{ url_for('static', filename='vendor/bootstrap-icons/font/bootstrap-icons.min.css') }}"
+            rel="stylesheet"
+        />
+        <link
+            rel="stylesheet"
+            href="{{ url_for('static', filename='css/app.css') }}"
+        />
+    </head>
+    <body>
+        <button
+            class="sidebar-toggle"
+            id="sidebarToggle"
+            type="button"
+            aria-label="Toggle sidebar"
+        >
+            <i class="bi bi-list"></i>
+        </button>
+        <div class="container-fluid">
+            <div class="row">
+                {% include 'partials/sidebar.html' %}
+                <div class="main-panel p-5">
+                    {% include 'partials/top_nav.html' %}
+                    <div class="mb-3">
+                        <a
+                            href="{{ url_for('account_page') }}"
+                            class="btn btn-outline-teal btn-sm"
+                        >
+                            <i class="bi bi-arrow-left"></i> Back to Account
+                        </a>
+                    </div>
+                    <div class="content-box mb-4">
+                        <h2 class="fw-bold mb-2">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i
+                            >Delete Account
+                        </h2>
+                        <p class="mb-0">
+                            This is a permanent action. Once you delete your
+                            account, there is no going back. Please be certain.
+                        </p>
+                    </div>
+
+                    <div class="danger-box">
+                        <h4 class="section-title">
+                            <i class="bi bi-exclamation-triangle-fill"></i
+                            >Confirm Account Deletion
+                        </h4>
+                        <p class="mb-2 small">
+                            Deleting your account will remove your profile,
+                            login access, and scan history. This action cannot
+                            be undone.
+                        </p>
+                        <div
+                            class="alert alert-danger py-2"
+                            id="deleteError"
+                            style="display: none"
+                        ></div>
+                        <div
+                            class="alert alert-success py-2"
+                            id="deleteSuccess"
+                            style="display: none"
+                        ></div>
+                        <div class="mb-2">
+                            <label class="form-label fw-bold small">
+                                Type <code>DELETE</code> to confirm
+                            </label>
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="confirmText"
+                                placeholder="DELETE"
+                            />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold small">
+                                Confirm with your password
+                            </label>
+                            <div class="input-group">
+                                <input
+                                    type="password"
+                                    class="form-control"
+                                    id="deletePassword"
+                                    placeholder="Your password"
+                                    autocomplete="current-password"
+                                />
+                                <button
+                                    class="btn btn-password-toggle password-toggle"
+                                    type="button"
+                                    data-target="deletePassword"
+                                    aria-label="Show password"
+                                >
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <button
+                            type="button"
+                            class="btn btn-delete-account"
+                            id="deleteAccountBtn"
+                        >
+                            <i class="bi bi-trash-fill me-1"></i> Delete my
+                            account
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+        <script>
+            // Delete account flow
+            document
+                .getElementById("deleteAccountBtn")
+                .addEventListener("click", async function () {
+                    const successBox = document.getElementById("deleteSuccess");
+                    const errorBox = document.getElementById("deleteError");
+                    successBox.style.display = "none";
+                    errorBox.style.display = "none";
+
+                    const confirmText = document
+                        .getElementById("confirmText")
+                        .value.trim();
+                    const password = document
+                        .getElementById("deletePassword")
+                        .value.trim();
+
+                    if (!confirmText || !password) {
+                        errorBox.textContent =
+                            "Please type DELETE and enter your password.";
+                        errorBox.style.display = "block";
+                        return;
+                    }
+
+                    if (
+                        !window.confirm(
+                            "Are you sure you want to permanently delete your account? This cannot be undone.",
+                        )
+                    ) {
+                        return;
+                    }
+
+                    const btn = document.getElementById("deleteAccountBtn");
+                    const loader =
+                        window.aiTomato && window.aiTomato.buttonLoader;
+                    if (loader) {
+                        loader.setLoading(btn, "Deleting account...");
+                    } else {
+                        btn.disabled = true;
+                    }
+                    let redirecting = false;
+
+                    try {
+                        const res = await fetch(
+                            "{{ url_for('api_delete_account') }}",
+                            {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({
+                                    confirm_text: confirmText,
+                                    password: password,
+                                }),
+                            },
+                        );
+                        const data = await res.json();
+                        if (res.ok && data.success) {
+                            successBox.textContent =
+                                data.message ||
+                                "Your account has been deleted.";
+                            successBox.style.display = "block";
+                            redirecting = true;
+                            if (loader) {
+                                loader.setRedirecting(btn, "Redirecting...");
+                            }
+                            // Redirect back to home after a short delay
+                            setTimeout(function () {
+                                window.location.href =
+                                    data.redirect || "{{ url_for('index') }}";
+                            }, 1200);
+                            return;
+                        } else {
+                            errorBox.textContent =
+                                data.message || "Failed to delete account.";
+                            errorBox.style.display = "block";
+                        }
+                    } catch (err) {
+                        errorBox.textContent =
+                            "Error deleting account. Please try again.";
+                        errorBox.style.display = "block";
+                    }
+                    if (!redirecting) {
+                        if (loader) {
+                            loader.reset(btn);
+                        } else {
+                            btn.disabled = false;
+                        }
+                    }
+                });
+        </script>
+    </body>
+</html>

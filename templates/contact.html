@@ -1,0 +1,156 @@
+﻿<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>AI Tomato Care - Contact</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}"
+            rel="stylesheet"
+        />
+        <link
+            href="{{ url_for('static', filename='vendor/bootstrap-icons/font/bootstrap-icons.min.css') }}"
+            rel="stylesheet"
+        />
+        <link
+            rel="stylesheet"
+            href="{{ url_for('static', filename='css/app.css') }}"
+        />
+        <style>
+            .contact-card {
+                background: linear-gradient(
+                    135deg,
+                    rgba(153, 246, 228, 0.92),
+                    rgba(253, 164, 175, 0.92)
+                );
+                border-radius: 18px;
+                padding: 28px;
+                box-shadow: var(--shadow);
+                border: 1px solid rgba(13, 148, 136, 0.24);
+            }
+            .contact-card .form-control {
+                background: rgba(255, 255, 255, 0.86);
+                border: 1px solid rgba(13, 148, 136, 0.25);
+            }
+        </style>
+    </head>
+    <body>
+        <button
+            class="sidebar-toggle"
+            id="sidebarToggle"
+            type="button"
+            aria-label="Toggle sidebar"
+        >
+            <i class="bi bi-list"></i>
+        </button>
+        <div class="container-fluid">
+            <div class="row">
+                {% include 'partials/sidebar.html' %}
+                <div class="main-panel p-5">
+                    {% include 'partials/top_nav.html' %}
+
+                    <div class="contact-card">
+                        <h2 class="fw-bold mb-2">Get in touch</h2>
+                        <p class="mb-4">
+                            Send a message or request a feature. We usually
+                            respond within 1-2 business days.
+                        </p>
+                        {% if error %}
+                        <div class="alert alert-danger py-2">{{ error }}</div>
+                        {% endif %} {% if success %}
+                        <div class="alert alert-success py-2">
+                            {{ success }}
+                        </div>
+                        {% endif %}
+                        <form
+                            id="contactForm"
+                            method="POST"
+                            action="{{ url_for('contact_page') }}"
+                        >
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Name</label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    name="name"
+                                    placeholder="Your name"
+                                    required
+                                />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Email</label>
+                                <input
+                                    type="email"
+                                    class="form-control"
+                                    name="email"
+                                    placeholder="you@email.com"
+                                    value="{% if current_user.is_authenticated %}{{ current_user.email }}{% endif %}"
+                                    {%
+                                    if
+                                    current_user.is_authenticated
+                                    %}readonly{%
+                                    endif
+                                    %}
+                                    required
+                                />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">
+                                    Subject
+                                </label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    name="subject"
+                                    placeholder="Subject"
+                                />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">
+                                    Message
+                                </label>
+                                <textarea
+                                    class="form-control"
+                                    rows="4"
+                                    name="message"
+                                    placeholder="Tell us how we can help."
+                                    required
+                                ></textarea>
+                            </div>
+                            <button
+                                type="submit"
+                                class="btn btn-primary-custom"
+                                id="contactSendBtn"
+                            >
+                                <i class="bi bi-send-fill"></i>
+                                Send message
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+        <script>
+            const contactForm = document.getElementById("contactForm");
+            if (contactForm) {
+                contactForm.addEventListener("submit", function () {
+                    const sendBtn = document.getElementById("contactSendBtn");
+                    const loader =
+                        window.aiTomato && window.aiTomato.buttonLoader;
+                    if (loader) {
+                        loader.setLoading(sendBtn, "Sending message...");
+                    } else if (sendBtn) {
+                        sendBtn.disabled = true;
+                    }
+                });
+            }
+        </script>
+    </body>
+</html>

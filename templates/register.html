@@ -1,0 +1,445 @@
+﻿<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>AI Tomato Care - Sign Up</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}"
+            rel="stylesheet"
+        />
+        <link
+            href="{{ url_for('static', filename='vendor/bootstrap-icons/font/bootstrap-icons.min.css') }}"
+            rel="stylesheet"
+        />
+        <link
+            rel="stylesheet"
+            href="{{ url_for('static', filename='css/app.css') }}"
+        />
+        <style>
+            .register-card {
+                background: var(--card-gradient);
+                border-radius: 20px;
+                padding: 40px;
+                color: var(--text-dark);
+                max-width: 420px;
+                margin: auto;
+                box-shadow: var(--shadow);
+            }
+            .form-control,
+            .form-control:focus {
+                border-radius: 12px;
+                border: 2px solid rgba(13, 148, 136, 0.3);
+            }
+            .btn-register {
+                background: linear-gradient(
+                    135deg,
+                    var(--primary),
+                    var(--accent)
+                );
+                color: #fff;
+                border-radius: 16px;
+                width: 100%;
+                padding: 12px;
+                font-weight: 600;
+                border: none;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                box-shadow: 0 12px 26px rgba(13, 148, 136, 0.26);
+                transition:
+                    transform 0.2s ease,
+                    box-shadow 0.2s ease,
+                    background 0.2s ease;
+            }
+            .btn-register:hover {
+                background: linear-gradient(
+                    135deg,
+                    var(--accent),
+                    var(--primary-dark)
+                );
+                color: #fff;
+                transform: translateY(-2px);
+                box-shadow: 0 18px 32px rgba(13, 148, 136, 0.3);
+            }
+            .btn-google {
+                background: rgba(255, 255, 255, 0.9);
+                color: var(--primary-dark);
+                border: 2px solid rgba(15, 118, 110, 0.25);
+                border-radius: 16px;
+                width: 100%;
+                padding: 12px;
+                font-weight: 600;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 10px;
+                box-shadow: 0 10px 22px rgba(15, 118, 110, 0.1);
+                transition:
+                    transform 0.2s ease,
+                    box-shadow 0.2s ease,
+                    border-color 0.2s ease,
+                    color 0.2s ease;
+            }
+            .btn-google:hover {
+                background: #ffffff;
+                border-color: rgba(20, 184, 166, 0.45);
+                color: var(--primary-dark);
+                transform: translateY(-1px);
+                box-shadow: 0 14px 26px rgba(15, 118, 110, 0.16);
+            }
+        </style>
+    </head>
+    <body>
+        <button
+            class="sidebar-toggle"
+            id="sidebarToggle"
+            type="button"
+            aria-label="Toggle sidebar"
+        >
+            <i class="bi bi-list"></i>
+        </button>
+        <div class="container-fluid">
+            <div class="row">
+                {% include 'partials/sidebar.html' %}
+                <div class="main-panel p-5">
+                    {% include 'partials/top_nav.html' %}
+                    <div class="register-card">
+                        <h2 class="fw-bold mb-4 text-center">Create Account</h2>
+                        <div
+                            class="alert alert-success py-2"
+                            id="successAlert"
+                            style="{% if success %}display: block;{% else %}display: none;{% endif %}"
+                        >
+                            {{ success or '' }}
+                        </div>
+                        <div
+                            class="alert alert-danger py-2"
+                            id="errorAlert"
+                            style="{% if error %}display: block;{% else %}display: none;{% endif %}"
+                        >
+                            {{ error or '' }}
+                        </div>
+                        <form
+                            id="registerForm"
+                            style="{% if otp_stage %}display:none;{% endif %}"
+                        >
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold">
+                                    Name
+                                </label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    id="name"
+                                    name="name"
+                                    placeholder="Your name"
+                                    required
+                                />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold">
+                                    Email
+                                </label>
+                                <input
+                                    type="email"
+                                    class="form-control"
+                                    id="email"
+                                    name="email"
+                                    placeholder="Email"
+                                    value="{{ otp_email or request.args.get('email', '') }}"
+                                    required
+                                />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold">
+                                    Password
+                                </label>
+                                <div class="input-group">
+                                    <input
+                                        type="password"
+                                        class="form-control"
+                                        id="password"
+                                        name="password"
+                                        placeholder="Password"
+                                        minlength="8"
+                                        autocomplete="new-password"
+                                        required
+                                    />
+                                    <button
+                                        class="btn btn-password-toggle password-toggle"
+                                        type="button"
+                                        data-target="password"
+                                        aria-label="Show password"
+                                    >
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                </div>
+                                <div class="form-text small">
+                                    Minimum 8 characters.
+                                </div>
+                            </div>
+                            <button
+                                type="submit"
+                                class="btn btn-register mb-2 w-100"
+                                id="registerSubmitBtn"
+                            >
+                                Sign Up
+                            </button>
+                            <p class="mb-0 text-center small mt-2">
+                                Already have an account?
+                                <a
+                                    href="{{ url_for('login_page') }}"
+                                    class="fw-bold"
+                                >
+                                    Login
+                                </a>
+                            </p>
+                        </form>
+                        <form
+                            id="otpForm"
+                            style="{% if otp_stage %}display:block;{% else %}display:none;{% endif %}"
+                        >
+                            <h5 class="fw-bold mt-2">Verify your email</h5>
+                            <p class="small mb-3">
+                                We sent a 6-digit OTP to your email. Enter it
+                                below to finish sign up.
+                            </p>
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold">
+                                    Email
+                                </label>
+                                <input
+                                    type="email"
+                                    class="form-control"
+                                    id="otpEmail"
+                                    value="{{ otp_email or '' }}"
+                                    readonly
+                                />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold">
+                                    OTP Code
+                                </label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    id="otpCode"
+                                    placeholder="Enter 6-digit code"
+                                    maxlength="6"
+                                    inputmode="numeric"
+                                    pattern="[0-9]{6}"
+                                    minlength="6"
+                                    autocomplete="one-time-code"
+                                    required
+                                />
+                            </div>
+                            <div class="d-flex gap-2">
+                                <button
+                                    type="submit"
+                                    class="btn btn-register flex-grow-1"
+                                    id="verifyOtpBtn"
+                                >
+                                    Verify Email
+                                </button>
+                                <button
+                                    type="button"
+                                    class="btn btn-google flex-grow-1"
+                                    id="resendOtpBtn"
+                                >
+                                    Resend OTP
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+        <script>
+            document
+                .getElementById("registerForm")
+                .addEventListener("submit", async function (e) {
+                    e.preventDefault();
+                    const submitBtn =
+                        document.getElementById("registerSubmitBtn");
+                    const loader =
+                        window.aiTomato && window.aiTomato.buttonLoader;
+                    if (loader) {
+                        loader.setLoading(submitBtn, "Creating account...");
+                    }
+                    document.getElementById("errorAlert").style.display =
+                        "none";
+                    document.getElementById("successAlert").style.display =
+                        "none";
+                    const passwordValue =
+                        document.getElementById("password").value || "";
+                    if (passwordValue.length < 8) {
+                        document.getElementById("errorAlert").textContent =
+                            "Password must be at least 8 characters.";
+                        document.getElementById("errorAlert").style.display =
+                            "block";
+                        if (loader) {
+                            loader.reset(submitBtn);
+                        }
+                        return;
+                    }
+                    const form = document.getElementById("registerForm");
+                    const formData = new FormData(form);
+                    formData.set("password", passwordValue);
+                    try {
+                        const res = await fetch(
+                            "{{ url_for('register_page') }}",
+                            {
+                                method: "POST",
+                                headers: {
+                                    "X-Requested-With": "XMLHttpRequest",
+                                },
+                                body: formData,
+                            },
+                        );
+                        const data = await res.json();
+                        if (data.success && data.stage === "otp") {
+                            document.getElementById(
+                                "successAlert",
+                            ).textContent =
+                                data.message || "OTP sent. Please verify.";
+                            document.getElementById(
+                                "successAlert",
+                            ).style.display = "block";
+                            document.getElementById("otpEmail").value =
+                                data.email;
+                            document.getElementById(
+                                "registerForm",
+                            ).style.display = "none";
+                            document.getElementById("otpForm").style.display =
+                                "block";
+                            if (loader) {
+                                loader.reset(submitBtn);
+                            }
+                            return;
+                        }
+                        if (data.success && data.redirect) {
+                            if (loader) {
+                                loader.setRedirecting(
+                                    submitBtn,
+                                    "Redirecting...",
+                                );
+                            }
+                            window.location.href = data.redirect;
+                            return;
+                        }
+                        document.getElementById("errorAlert").textContent =
+                            data.message || "Sign up failed.";
+                        document.getElementById("errorAlert").style.display =
+                            "block";
+                    } catch (err) {
+                        document.getElementById("errorAlert").textContent =
+                            "Sign up failed. Please try again.";
+                        document.getElementById("errorAlert").style.display =
+                            "block";
+                    }
+                    if (loader) {
+                        loader.reset(submitBtn);
+                    }
+                });
+
+            document
+                .getElementById("otpForm")
+                .addEventListener("submit", async function (e) {
+                    e.preventDefault();
+                    const verifyBtn = document.getElementById("verifyOtpBtn");
+                    const loader =
+                        window.aiTomato && window.aiTomato.buttonLoader;
+                    if (loader) {
+                        loader.setLoading(verifyBtn, "Verifying...");
+                    }
+                    document.getElementById("errorAlert").style.display =
+                        "none";
+                    document.getElementById("successAlert").style.display =
+                        "none";
+
+                    const email = document.getElementById("otpEmail").value;
+                    const otp = document.getElementById("otpCode").value.trim();
+
+                    try {
+                        const res = await fetch(
+                            "{{ url_for('verify_email_page') }}",
+                            {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({ email, otp }),
+                            },
+                        );
+                        const data = await res.json();
+                        if (data.success) {
+                            document.getElementById(
+                                "successAlert",
+                            ).textContent = data.message || "Verified.";
+                            document.getElementById(
+                                "successAlert",
+                            ).style.display = "block";
+                            const redirectUrl =
+                                data.redirect || "{{ url_for('login_page') }}";
+                            if (loader) {
+                                loader.setRedirecting(
+                                    verifyBtn,
+                                    "Redirecting...",
+                                );
+                            }
+                            setTimeout(() => {
+                                window.location.href = redirectUrl;
+                            }, 2000);
+                            return;
+                        }
+                        document.getElementById("errorAlert").textContent =
+                            data.message || "OTP verification failed.";
+                        document.getElementById("errorAlert").style.display =
+                            "block";
+                    } catch (err) {
+                        document.getElementById("errorAlert").textContent =
+                            "OTP verification failed. Please try again.";
+                        document.getElementById("errorAlert").style.display =
+                            "block";
+                    }
+                    if (loader) {
+                        loader.reset(verifyBtn);
+                    }
+                });
+
+            document
+                .getElementById("resendOtpBtn")
+                .addEventListener("click", async function () {
+                    document.getElementById("errorAlert").style.display =
+                        "none";
+                    document.getElementById("successAlert").style.display =
+                        "none";
+                    const email = document.getElementById("otpEmail").value;
+                    const res = await fetch("{{ url_for('resend_otp') }}", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ email }),
+                    });
+                    const data = await res.json();
+                    if (data.success) {
+                        document.getElementById("successAlert").textContent =
+                            data.message || "OTP resent.";
+                        document.getElementById("successAlert").style.display =
+                            "block";
+                        return;
+                    }
+                    document.getElementById("errorAlert").textContent =
+                        data.message || "Failed to resend OTP.";
+                    document.getElementById("errorAlert").style.display =
+                        "block";
+                });
+        </script>
+    </body>
+</html>

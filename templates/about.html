@@ -1,0 +1,159 @@
+﻿<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>AI Tomato Care - About</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}"
+            rel="stylesheet"
+        />
+        <link
+            href="{{ url_for('static', filename='vendor/bootstrap-icons/font/bootstrap-icons.min.css') }}"
+            rel="stylesheet"
+        />
+        <link
+            rel="stylesheet"
+            href="{{ url_for('static', filename='css/app.css') }}"
+        />
+        <style>
+            .info-card {
+                background: var(--card-gradient);
+                border-radius: 16px;
+                padding: 24px;
+                color: var(--text-dark);
+                box-shadow: var(--shadow);
+                margin-bottom: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <button
+            class="sidebar-toggle"
+            id="sidebarToggle"
+            type="button"
+            aria-label="Toggle sidebar"
+        >
+            <i class="bi bi-list"></i>
+        </button>
+        <div class="container-fluid">
+            <div class="row">
+                {% include 'partials/sidebar.html' %}
+                <div class="main-panel p-5">
+                    {% include 'partials/top_nav.html' %}
+                    <h2 class="fw-bold mb-4" style="color: var(--text-dark)">
+                        <i class="bi bi-info-circle me-2"></i>About AI Tomato
+                        Care
+                    </h2>
+
+                    <div class="info-card">
+                        <h5 class="fw-bold mb-3">What is AI Tomato Care?</h5>
+                        <p class="mb-0">
+                            AI Tomato Care is a web application that helps
+                            farmers, growers, and home gardeners identify tomato
+                            leaf diseases from photos. Using a trained deep
+                            learning model, the platform can classify
+                            <strong>Early Blight</strong>,
+                            <strong>Late Blight</strong>,
+                            <strong>Leaf Mold</strong>, or a
+                            <strong>Healthy</strong> leaf condition. After each
+                            scan, users receive practical care guidance to
+                            support faster action in the field.
+                        </p>
+                    </div>
+
+                    <div class="info-card">
+                        <h5 class="fw-bold mb-3">Why We Built This</h5>
+                        <p class="mb-0">
+                            Tomato diseases can spread quickly and reduce both
+                            yield and fruit quality. Early detection makes
+                            treatment more effective, but expert support is not
+                            always available when needed. We built AI Tomato
+                            Care to make diagnosis easier and more accessible by
+                            combining image analysis with clear, action-focused
+                            recommendations.
+                        </p>
+                    </div>
+
+                    <div class="info-card">
+                        <h5 class="fw-bold mb-3">How It Works</h5>
+                        <ul class="mb-0">
+                            <li>
+                                <strong>Upload:</strong> Add a clear tomato leaf
+                                image (JPG or PNG) from the Home page.
+                            </li>
+                            <li>
+                                <strong>Detect:</strong> The system preprocesses
+                                the image and runs it through a trained CNN
+                                model to predict disease class or healthy
+                                status.
+                            </li>
+                            <li>
+                                <strong>Results:</strong> View the predicted
+                                result with a confidence score.
+                            </li>
+                            <li>
+                                <strong>Care Tips:</strong> Follow care guidance
+                                tailored to each detected condition.
+                            </li>
+                            <li>
+                                <strong>History:</strong> Logged-in users can
+                                review previous scans in the History section.
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="info-card">
+                        <h5 class="fw-bold mb-3">Features</h5>
+                        <ul class="mb-0">
+                            <li>
+                                Fast image-based scanning for tomato leaves.
+                            </li>
+                            <li>
+                                Detection of Early Blight, Late Blight, Leaf
+                                Mold, and healthy leaf condition.
+                            </li>
+                            <li>Clear care tips linked to each detection.</li>
+                            <li>
+                                Scan history and progress tracking for users.
+                            </li>
+                            <li>
+                                Secure account workflow with sign-up, OTP email
+                                verification, and password reset.
+                            </li>
+                            <li>
+                                Simple interface for scanning, care guidance,
+                                history, and account management.
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <p class="small text-muted mb-2">
+                            Follow us on social media
+                        </p>
+                        <a href="#" class="social-link social-twitter"
+                            ><i class="bi bi-twitter-x"></i
+                        ></a>
+                        <a href="#" class="social-link social-whatsapp"
+                            ><i class="bi bi-whatsapp"></i
+                        ></a>
+                        <a href="#" class="social-link social-facebook"
+                            ><i class="bi bi-facebook"></i
+                        ></a>
+                        <a href="#" class="social-link social-instagram"
+                            ><i class="bi bi-instagram"></i
+                        ></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    </body>
+</html>

@@ -1,0 +1,111 @@
+﻿<div class="top-navbar">
+    <div class="brand" aria-label="AI Tomato Care">
+        <img
+            src="{{ url_for('static', filename='img/logo.png') }}"
+            alt="AI Tomato Care logo"
+            class="brand-logo"
+        />
+        <span>AI Tomato Care</span>
+    </div>
+    <div class="nav-links">
+        <a
+            href="{{ url_for('index') }}"
+            class="{% if request.endpoint == 'index' %}active{% endif %}"
+        >
+            Home
+        </a>
+        <a
+            href="{{ url_for('care_tips_page') }}"
+            class="{% if request.endpoint == 'care_tips_page' %}active{% endif %}"
+        >
+            Care Tips
+        </a>
+        <a
+            href="{{ url_for('about_page') }}"
+            class="{% if request.endpoint == 'about_page' %}active{% endif %}"
+        >
+            About
+        </a>
+        <a
+            href="{{ url_for('faq_page') }}"
+            class="{% if request.endpoint == 'faq_page' %}active{% endif %}"
+        >
+            FAQ
+        </a>
+        {% if current_user.is_authenticated %}
+        <a
+            href="{{ url_for('contact_page') }}"
+            class="{% if request.endpoint == 'contact_page' %}active{% endif %}"
+        >
+            Contact
+        </a>
+        {% endif %}
+    </div>
+    {% if request.endpoint == 'index' %}
+    <form
+        id="navbarSearchForm"
+        class="nav-search"
+        role="search"
+        action="#"
+        method="get"
+    >
+        <label for="headerSearchInput" class="visually-hidden">
+            Search site
+        </label>
+        <input
+            type="search"
+            class="form-control form-control-sm nav-search-input"
+            id="headerSearchInput"
+            placeholder="Search pages..."
+            autocomplete="off"
+        />
+    </form>
+    {% endif %}
+    <span
+        id="appTourPage"
+        data-tour-page="{{ request.endpoint or '' }}"
+        hidden
+    ></span>
+    {% if request.endpoint != 'index' %}
+    <button
+        type="button"
+        class="btn btn-sm btn-outline-teal nav-tour-btn"
+        id="appTourStart"
+        data-tour-page="{{ request.endpoint or '' }}"
+        title="Take a guided tour"
+        aria-label="Take a guided tour"
+    >
+        <i class="bi bi-compass"></i>
+        Tour
+    </button>
+    {% endif %}
+    {% if current_user.is_authenticated %}
+    <a
+        href="{{ url_for('account_page') }}"
+        class="nav-account-link {% if request.endpoint in ['account_page', 'change_password', 'delete_account'] %}active{% endif %}"
+        title="Account"
+    >
+        <i class="bi bi-person-circle"></i>
+        <span class="nav-account-name">{{ current_user.name }}</span>
+    </a>
+    {% else %}
+    <div class="nav-auth-actions">
+        <a
+            href="{{ url_for('login_page') }}"
+            class="btn btn-sm btn-outline-teal nav-auth-btn {% if request.endpoint == 'login_page' %}active{% endif %}"
+            title="Login"
+        >
+            <i class="bi bi-box-arrow-in-right"></i>
+            Login
+        </a>
+        <a
+            href="{{ url_for('register_page') }}"
+            class="btn btn-sm btn-outline-teal nav-auth-btn {% if request.endpoint == 'register_page' %}active{% endif %}"
+            title="Sign Up"
+        >
+            <i class="bi bi-person-plus"></i>
+            Sign Up
+        </a>
+    </div>
+    {% endif %}
+</div>

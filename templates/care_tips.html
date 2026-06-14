@@ -1,0 +1,195 @@
+﻿<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>AI Tomato Care - Care Tips</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}"
+            rel="stylesheet"
+        />
+        <link
+            href="{{ url_for('static', filename='vendor/bootstrap-icons/font/bootstrap-icons.min.css') }}"
+            rel="stylesheet"
+        />
+        <link
+            rel="stylesheet"
+            href="{{ url_for('static', filename='css/app.css') }}"
+        />
+        <style>
+            .tip-card {
+                background: var(--card-gradient);
+                border-radius: 16px;
+                padding: 24px;
+                color: var(--text-dark);
+                box-shadow: var(--shadow);
+                margin-bottom: 20px;
+                border: none;
+            }
+            .tip-card .icon-wrap {
+                width: 56px;
+                height: 56px;
+                background: rgba(255, 255, 255, 0.7);
+                border-radius: 14px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-bottom: 16px;
+            }
+            .tip-card .icon-wrap i {
+                font-size: 1.8rem;
+                color: var(--primary);
+            }
+        </style>
+    </head>
+    <body>
+        <button
+            class="sidebar-toggle"
+            id="sidebarToggle"
+            type="button"
+            aria-label="Toggle sidebar"
+        >
+            <i class="bi bi-list"></i>
+        </button>
+        <div class="container-fluid">
+            <div class="row">
+                {% include 'partials/sidebar.html' %}
+                <div class="main-panel p-5">
+                    {% include 'partials/top_nav.html' %}
+                    <h2 class="fw-bold mb-4" style="color: var(--text-dark)">
+                        <i class="bi bi-lightbulb me-2"></i>Tomato Care Tips
+                    </h2>
+                    <p class="lead mb-4" style="color: var(--text-dark)">
+                        Strong daily care habits are the easiest way to prevent from
+                        disease and improve fruits quality. Use these practical
+                        tips to keep your Tomato plants healthy through the season.
+                    </p>
+
+                    <div class="tip-card">
+                        <div class="icon-wrap">
+                            <i class="bi bi-droplet-fill"></i>
+                        </div>
+                        <h5 class="fw-bold mb-2">Watering</h5>
+                        <ul class="mb-0">
+                            <li>
+                                Water at the <strong>base</strong> of each plant
+                                to keep foliage dry and lower fungal risk.
+                            </li>
+                            <li>
+                                Water in the <strong>morning</strong> so any
+                                moisture dries before evening.
+                            </li>
+                            <li>
+                                Avoid overhead watering whenever possible; drip
+                                irrigation or a soaker hose works best.
+                            </li>
+                            <li>
+                                Keep soil evenly moist, not waterlogged. In warm
+                                weather, aim for about 1-2 inches of water per
+                                week.
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="tip-card">
+                        <div class="icon-wrap">
+                            <i class="bi bi-sun-fill"></i>
+                        </div>
+                        <h5 class="fw-bold mb-2">Sunlight & Air</h5>
+                        <ul class="mb-0">
+                            <li>
+                                Tomatoes perform best with
+                                <strong>6-8 hours</strong> of direct sunlight
+                                each day.
+                            </li>
+                            <li>
+                                Space plants about 24-36 inches apart to improve
+                                airflow and reduce humidity around leaves.
+                            </li>
+                            <li>
+                                Prune lower leaves and selected suckers to
+                                increase ventilation and reduce contact with
+                                soil-borne pathogens.
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="tip-card">
+                        <div class="icon-wrap">
+                            <i class="bi bi-shield-check"></i>
+                        </div>
+                        <h5 class="fw-bold mb-2">Disease Prevention</h5>
+                        <ul class="mb-0">
+                            <li>
+                                <strong>Early Blight / Late Blight:</strong>
+                                Remove infected leaves promptly, avoid wet
+                                foliage, and use a labeled copper-based
+                                fungicide when needed.
+                            </li>
+                            <li>
+                                <strong>Leaf Mold:</strong> Reduce humidity,
+                                water at the base, and maintain good
+                                ventilation. In severe cases, apply an approved
+                                fungicide such as chlorothalonil.
+                            </li>
+                            <li>
+                                Rotate crops and avoid planting tomatoes in the
+                                same bed year after year.
+                            </li>
+                            <li>
+                                Add mulch around plants to reduce soil splash,
+                                stabilize moisture, and keep roots cooler.
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="tip-card">
+                        <div class="icon-wrap">
+                            <i class="bi bi-shield-check"></i>
+                        </div>
+                        <h5 class="fw-bold mb-2">Provide Healthy Soil</h5>
+                        <ul class="mb-0">
+                            <li>
+                                Work compost into the soil before planting tomatoes.
+                            </li>
+                            <li>
+                                Side-dress plantings with compost midseason to add nutrients.
+                            </li>
+                            <li>
+                                Apply a fertilizer specifically designed for tomatoes every two weeks during the growing season, starting with planting time.
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="tip-card">
+                        <div class="icon-wrap">
+                            <i class="bi bi-camera-fill"></i>
+                        </div>
+                        <h5 class="fw-bold mb-2">Using AI Tomato Care</h5>
+                        <p class="mb-0">
+                            Upload a clear, close-up photo of one tomato leaf
+                            from the
+                            <a
+                                href="{{ url_for('index') }}"
+                                class="text-dark fw-bold"
+                            >
+                                Home
+                            </a>
+                            page. The AI analyzes the image and reports whether
+                            it matches Early Blight, Late Blight, Leaf Mold, or
+                            a healthy leaf. Use the tips above as your next
+                            step, and sign in if you want to track scan history
+                            over time.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    </body>
+</html>
